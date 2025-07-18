@@ -4,17 +4,17 @@ from flask_mysqldb import MySQL
 import config
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "*"}})
+# CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 
-# CORS(app, resources={
-#     r"/api/*": {
-#         "origins": [
-#             "http://localhost:5173",
-#             "https://chipper-malasada-65cf89.netlify.app"
-#         ]
-#     }
-# })
+CORS(app, resources={
+    r"/api/*": {
+        "origins": [
+            "http://localhost:5173",
+            "https://enchanting-frangipane-61f6d8.netlify.app"
+        ]
+    }
+})
 
 
 app.config['MYSQL_HOST'] = config.MYSQL_HOST
