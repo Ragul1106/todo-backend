@@ -4,7 +4,10 @@ from flask_mysqldb import MySQL
 import config
 
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:5173"], supports_credentials=True)
+CORS(app, origins=[
+    "http://localhost:5173", 
+    "https://prismatic-marshmallow-9e2b34.netlify.app/", 
+])
 
 app.config['MYSQL_HOST'] = config.MYSQL_HOST
 app.config['MYSQL_USER'] = config.MYSQL_USER
