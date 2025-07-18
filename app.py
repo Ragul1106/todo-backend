@@ -7,7 +7,11 @@ app = Flask(__name__)
 
 from flask_cors import CORS
 
-CORS(app, origins=["http://localhost:5173", "https://chipper-malasada-65cf89.netlify.app"], supports_credentials=True)
+CORS(app, resources={r"/api/*": {"origins": [
+    "http://localhost:5173",
+    "https://chipper-malasada-65cf89.netlify.app/",
+]}})
+
 
 
 
