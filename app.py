@@ -6,7 +6,7 @@ import config
 app = Flask(__name__)
 CORS(app, origins=[
     "http://localhost:5173", 
-    "https://prismatic-marshmallow-9e2b34.netlify.app/", 
+    "https://splendorous-puffpuff-4cd6dc.netlify.app/", 
 ])
 
 app.config['MYSQL_HOST'] = config.MYSQL_HOST
