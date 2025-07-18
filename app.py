@@ -5,8 +5,6 @@ import config
 
 app = Flask(__name__)
 
-from flask_cors import CORS
-
 CORS(app, resources={
     r"/api/*": {
         "origins": [
@@ -15,7 +13,6 @@ CORS(app, resources={
         ]
     }
 })
-
 
 
 app.config['MYSQL_HOST'] = config.MYSQL_HOST
