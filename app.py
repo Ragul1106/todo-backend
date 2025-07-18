@@ -5,7 +5,6 @@ import config
 
 app = Flask(__name__)
 CORS(app, origins=[
-    "http://localhost:5173", 
     "https://splendorous-puffpuff-4cd6dc.netlify.app/", 
 ])
 
