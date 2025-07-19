@@ -1,12 +1,16 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from datetime import timedelta
 from flask_mysqldb import MySQL
 import config
 
 app = Flask(__name__)
 
-CORS(app, origins=["https://deluxe-frangipane-1235fb.netlify.app"], supports_credentials=True)
-
+CORS(app, 
+    resources={r"/api/*": {"origins": "https://deluxe-frangipane-1235fb.netlify.app"}},
+    supports_credentials=True,
+    max_age=timedelta(days=1)
+)
 app.config['MYSQL_HOST'] = config.MYSQL_HOST
 app.config['MYSQL_USER'] = config.MYSQL_USER
 app.config['MYSQL_PASSWORD'] = config.MYSQL_PASSWORD
