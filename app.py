@@ -5,7 +5,7 @@ from flask_mysqldb import MySQL
 app = Flask(__name__)
 
 CORS(app, resources={r"/api/*": {"origins": [
-    "https://todo-list-managing.netlify.app/",  
+    "https://todo-list-managing.netlify.app",  
     "http://localhost:5173"  
 ]}})
 
