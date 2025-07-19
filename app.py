@@ -4,18 +4,8 @@ from flask_mysqldb import MySQL
 import config
 
 app = Flask(__name__)
-# CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-
-CORS(app, resources={
-    r"/api/*": {
-        "origins": [
-            "http://localhost:5173",
-            "https://enchanting-frangipane-61f6d8.netlify.app"
-        ]
-    }
-})
-
+CORS(app, origins=["https://deluxe-frangipane-1235fb.netlify.app/"], supports_credentials=True)
 
 app.config['MYSQL_HOST'] = config.MYSQL_HOST
 app.config['MYSQL_USER'] = config.MYSQL_USER
@@ -79,10 +69,10 @@ def delete_task(id):
         return jsonify({'message': 'Task deleted'})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-    
+
 @app.route('/')
 def index():
-    return 'Flask To-Do API Running '
+    return 'Flask To-Do API Running 🚀'
 
 if __name__ == "__main__":
     app.run(debug=True)
