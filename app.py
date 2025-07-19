@@ -4,13 +4,11 @@ from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 
-# ✅ CORS — allow Netlify frontend domain
 CORS(app, resources={r"/api/*": {"origins": [
-    "https://deluxe-frangipane-1235fb.netlify.app",  # Adjust if your domain changes
-    "http://localhost:5173"  # For local dev
+    "https://todo-list-managing.netlify.app/",  
+    "http://localhost:5173"  
 ]}})
 
-# ✅ MySQL config (adjust as per your database setup)
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'Ragul@116'
