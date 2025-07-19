@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 # ✅ Allow CORS from Netlify and localhost
 CORS(app, resources={r"/api/*": {"origins": [
-    "https://chipper-malasada-65cf89.netlify.app",  # Your Netlify frontend
+    "https://todo-list-managing.netlify.app",  # Your Netlify frontend
     "http://localhost:5173"  # Local dev
 ]}})
 
