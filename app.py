@@ -4,17 +4,15 @@ from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 
-# ✅ Allow CORS from Netlify and localhost
 CORS(app, resources={r"/api/*": {"origins": [
-    "https://todo-list-managing.netlify.app",  # Your Netlify frontend
-    "http://localhost:5173"  # Local dev
+    "https://todo-list-managing.netlify.app", 
+    "http://localhost:5173"  
 ]}})
 
-# ✅ MySQL Railway DB config
-app.config['MYSQL_HOST'] = 'mysql.railway.internal'
+app.config['MYSQL_HOST'] = 'mysql://root:yvADtitJOieTGVMXmaEidbbOgMRegfTq@mysql.railway.internal:3306/railway'
 app.config['MYSQL_PORT'] = 3306
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'vyPqnLBrNuSFmTxefiSgxfurvCHrkRvJ'
+app.config['MYSQL_PASSWORD'] = 'yvADtitJOieTGVMXmaEidbbOgMRegfTq'
 app.config['MYSQL_DB'] = 'railway'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
@@ -42,7 +40,7 @@ def get_tasks():
 @app.route('/api/tasks', methods=['POST', 'OPTIONS'])
 def add_task():
     if request.method == 'OPTIONS':
-        return '', 200  # CORS preflight
+        return '', 200  
     try:
         data = request.get_json()
         title = data.get("title")
