@@ -4,13 +4,11 @@ from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 
-# Enable CORS for both local and deployed frontend
 CORS(app, resources={r"/api/*": {"origins": [
     "https://todo-list-managing.netlify.app",
     "http://localhost:5173"
 ]}})
 
-# Railway MySQL connection config
 app.config['MYSQL_HOST'] = 'turntable.proxy.rlwy.net'
 app.config['MYSQL_PORT'] = 38656
 app.config['MYSQL_USER'] = 'root'
@@ -24,7 +22,6 @@ mysql = MySQL(app)
 def home():
     return "✅ Flask API is running!"
 
-# Get all tasks
 @app.route('/api/tasks', methods=['GET'])
 def get_tasks():
     try:
@@ -59,7 +56,6 @@ def add_task():
         print("❌ POST /api/tasks Error:", e)
         return jsonify({"error": str(e)}), 500
 
-# Update a task's completion status
 @app.route('/api/tasks/<int:id>', methods=['PUT', 'OPTIONS'])
 def update_task(id):
     if request.method == 'OPTIONS':
@@ -76,7 +72,6 @@ def update_task(id):
         print("❌ PUT /api/tasks Error:", e)
         return jsonify({"error": str(e)}), 500
 
-# Delete a task
 @app.route('/api/tasks/<int:id>', methods=['DELETE', 'OPTIONS'])
 def delete_task(id):
     if request.method == 'OPTIONS':
