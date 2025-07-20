@@ -92,6 +92,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_mysqldb import MySQL
+from datetime import datetime
 
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": ["https://todo-list-managing.netlify.app", "http://localhost:5173"]}})
@@ -120,22 +121,33 @@ def get_tasks():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
 @app.route('/api/tasks', methods=['POST', 'OPTIONS'])
 def add_task():
     if request.method == 'OPTIONS':
         return '', 200
     try:
         data = request.get_json()
+        title = data.get("title")
+        description = data.get("description")
+        due_date_str = data.get("due_date")
+        priority = data.get("priority", "Medium")
+
+        due_date = None
+        if due_date_str:
+            due_date = datetime.fromisoformat(due_date_str)
+
         cur = mysql.connection.cursor()
         cur.execute("""
             INSERT INTO tasks (task_name, description, due_date, priority, is_completed)
             VALUES (%s, %s, %s, %s, %s)
-        """, (data.get("title"), data.get("description"), data.get("due_date"), data.get("priority"), False))
+        """, (title, description, due_date, priority, False))
         mysql.connection.commit()
         cur.close()
         return jsonify({"message": "Task added"}), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 @app.route('/api/tasks/<int:id>', methods=['PUT', 'OPTIONS'])
 def update_task(id):
