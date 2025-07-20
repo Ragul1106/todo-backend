@@ -9,12 +9,13 @@ CORS(app, resources={r"/api/*": {"origins": [
     "http://localhost:5173"  
 ]}})
 
-app.config['MYSQL_HOST'] = 'mysql://root:yvADtitJOieTGVMXmaEidbbOgMRegfTq@mysql.railway.internal:3306/railway'
-app.config['MYSQL_PORT'] = 3306
+app.config['MYSQL_HOST'] = 'turntable.proxy.rlwy.net'
+app.config['MYSQL_PORT'] = 38656
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'yvADtitJOieTGVMXmaEidbbOgMRegfTq'
 app.config['MYSQL_DB'] = 'railway'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+
 
 mysql = MySQL(app)
 
