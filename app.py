@@ -64,17 +64,34 @@ def update_task(id):
         return '', 200
     try:
         data = request.get_json()
+
+        due_date_str = data.get("due_date")
+        due_date = None
+        if due_date_str:
+            try:
+                due_date = datetime.fromisoformat(due_date_str)
+            except ValueError:
+                due_date = None
+
         cur = mysql.connection.cursor()
         cur.execute("""
             UPDATE tasks
             SET task_name=%s, description=%s, due_date=%s, priority=%s, is_completed=%s
             WHERE id=%s
-        """, (data.get("title"), data.get("description"), data.get("due_date"), data.get("priority"), data.get("is_completed"), id))
+        """, (
+            data.get("title"),
+            data.get("description"),
+            due_date,
+            data.get("priority"),
+            data.get("is_completed"),
+            id
+        ))
         mysql.connection.commit()
         cur.close()
         return jsonify({"message": "Task updated"})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 @app.route('/api/tasks/<int:id>', methods=['DELETE', 'OPTIONS'])
 def delete_task(id):
