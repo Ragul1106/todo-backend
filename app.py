@@ -112,23 +112,14 @@ def home():
 
 @app.route('/api/tasks', methods=['GET'])
 def get_tasks():
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT id, task_name, description, due_date, priority, is_completed FROM tasks")
-    rows = cur.fetchall()
-    cur.close()
-
-    tasks = []
-    for row in rows:
-        tasks.append({
-            "id": row[0],
-            "title": row[1],
-            "description": row[2],
-            "due_date": row[3].strftime("%Y-%m-%d %H:%M") if row[3] else "",
-            "priority": row[4],
-            "is_completed": row[5]
-        })
-    return jsonify(tasks)
-
+    try:
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM tasks ORDER BY due_date")
+        rows = cur.fetchall()
+        cur.close()
+        return jsonify(rows)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route('/api/tasks', methods=['POST', 'OPTIONS'])
