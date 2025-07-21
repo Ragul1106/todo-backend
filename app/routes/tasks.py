@@ -7,14 +7,14 @@ task_bp = Blueprint('task_bp', __name__, url_prefix="/api")
 @task_bp.route("/tasks", methods=["GET"])
 def get_tasks():
     try:
-        cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM tasks ORDER BY due_date")
+        cur = mysql.connection.cursor(dictionary=True)
+        cur.execute("SELECT id, task_name AS title, description, due_date, priority, is_completed FROM tasks ORDER BY due_date")
         rows = cur.fetchall()
         cur.close()
         return jsonify(rows)
     except Exception as e:
+        print("🔥 GET error:", e)
         return jsonify({"error": str(e)}), 500
-
 
 @task_bp.route("/tasks", methods=["POST", "OPTIONS"])
 def add_task():
@@ -29,7 +29,10 @@ def add_task():
 
         due_date = None
         if due_date_str:
-            due_date = datetime.fromisoformat(due_date_str)
+            try:
+                due_date = datetime.fromisoformat(due_date_str)
+            except ValueError:
+                return jsonify({"error": "Invalid date format"}), 400
 
         cur = mysql.connection.cursor()
         cur.execute("""
@@ -40,8 +43,8 @@ def add_task():
         cur.close()
         return jsonify({"message": "Task added"}), 201
     except Exception as e:
+        print("🔥 POST error:", e)
         return jsonify({"error": str(e)}), 500
-
 
 @task_bp.route("/tasks/<int:id>", methods=["PUT", "OPTIONS"])
 def update_task(id):
@@ -66,8 +69,8 @@ def update_task(id):
         cur.close()
         return jsonify({"message": "Task updated"})
     except Exception as e:
+        print("🔥 PUT error:", e)
         return jsonify({"error": str(e)}), 500
-
 
 @task_bp.route("/tasks/<int:id>", methods=["DELETE", "OPTIONS"])
 def delete_task(id):
@@ -80,4 +83,5 @@ def delete_task(id):
         cur.close()
         return jsonify({"message": "Task deleted"})
     except Exception as e:
+        print("🔥 DELETE error:", e)
         return jsonify({"error": str(e)}), 500
