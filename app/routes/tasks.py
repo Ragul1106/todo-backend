@@ -1,25 +1,10 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-from flask_mysqldb import MySQL
+from flask import Blueprint, request, jsonify
+from ..db import mysql
 from datetime import datetime
 
-app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": ["https://todo-list-managing.netlify.app", "http://localhost:5173"]}})
+task_bp = Blueprint('task_bp', __name__, url_prefix="/api")
 
-app.config['MYSQL_HOST'] = 'turntable.proxy.rlwy.net'
-app.config['MYSQL_PORT'] = 38656
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'yvADtitJOieTGVMXmaEidbbOgMRegfTq'
-app.config['MYSQL_DB'] = 'railway'
-app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
-
-mysql = MySQL(app)
-
-@app.route('/')
-def home():
-    return "✅ Flask API is running!"
-
-@app.route('/api/tasks', methods=['GET'])
+@task_bp.route("/tasks", methods=["GET"])
 def get_tasks():
     try:
         cur = mysql.connection.cursor()
@@ -31,7 +16,7 @@ def get_tasks():
         return jsonify({"error": str(e)}), 500
 
 
-@app.route('/api/tasks', methods=['POST', 'OPTIONS'])
+@task_bp.route("/tasks", methods=["POST", "OPTIONS"])
 def add_task():
     if request.method == 'OPTIONS':
         return '', 200
@@ -58,7 +43,7 @@ def add_task():
         return jsonify({"error": str(e)}), 500
 
 
-@app.route('/api/tasks/<int:id>', methods=['PUT', 'OPTIONS'])
+@task_bp.route("/tasks/<int:id>", methods=["PUT", "OPTIONS"])
 def update_task(id):
     if request.method == 'OPTIONS':
         return '', 200
@@ -69,14 +54,22 @@ def update_task(id):
             UPDATE tasks
             SET task_name=%s, description=%s, due_date=%s, priority=%s, is_completed=%s
             WHERE id=%s
-        """, (data.get("title"), data.get("description"), data.get("due_date"), data.get("priority"), data.get("is_completed"), id))
+        """, (
+            data.get("title"),
+            data.get("description"),
+            data.get("due_date"),
+            data.get("priority"),
+            data.get("is_completed"),
+            id
+        ))
         mysql.connection.commit()
         cur.close()
         return jsonify({"message": "Task updated"})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route('/api/tasks/<int:id>', methods=['DELETE', 'OPTIONS'])
+
+@task_bp.route("/tasks/<int:id>", methods=["DELETE", "OPTIONS"])
 def delete_task(id):
     if request.method == 'OPTIONS':
         return '', 200
@@ -88,6 +81,3 @@ def delete_task(id):
         return jsonify({"message": "Task deleted"})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
-if __name__ == '__main__':
-    app.run(debug=False)
